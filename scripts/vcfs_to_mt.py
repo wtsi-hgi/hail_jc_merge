@@ -15,7 +15,7 @@ logging.basicConfig(format="%(levelname)s (%(name)s %(lineno)s): %(message)s")
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-project_root = Path(__file__)
+project_root = Path(__file__).parent.parent
 print(project_root)
 
 s3credentials = os.path.join(
