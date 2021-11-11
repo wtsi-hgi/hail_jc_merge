@@ -69,15 +69,54 @@ def main():
     # Import UKB hits
     import_lustre_dir="file:/lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge"
     vcf_header=f"{lustre_dir}/vcf_header.txt"
-    prefix_files="ukbb"
-    mt= import_vcfs_to_hail(import_lustre_dir,vcf_header,"ukb","vcf.gz")
+    prefix_files="ukb"
+    mt= import_vcfs_to_hail(import_lustre_dir,vcf_header,prefix_files,"vcf.gz")
     mt=hl.split_multi_hts(mt)
-    mt.write("f{lustre_dir}/matrixtables/ukbb_hits_split.mt", overwrite=True)
+    mt.write(f"{lustre_dir}/matrixtables/ukbb_hits_split.mt", overwrite=True)
+
     # Import UKB AKT
-
+    
+    ukbb_vcf=f"{import_lustre_dir}/ukb_akt.sorted.vcf.gz"
+    mt1 = hl.import_vcf(ukbb_vcf, reference_genome='GRCh38', force_bgz=True, array_elements_required=False)
+    mt=hl.split_multi_hts(mt)
+    mt.write(f"{lustre_dir}/matrixtables/ukb_akt_split.mt", overwrite=True)
     # Import UKB MAF > 0.01
+    import_lustre_dir="file:/lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge/vcf_files/maf_001_ukb"
+    vcf_header=f"{lustre_dir}/vcf_header.txt"
+    prefix_files="ukb"
+    mt= import_vcfs_to_hail(import_lustre_dir,vcf_header,prefix_files,"vcf.gz")
+    mt=hl.split_multi_hts(mt)
+    mt.write(f"{lustre_dir}/matrixtables/ukbb_MAF_0_01_split.mt")
+
+    mt1=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukbb_hits_split.mt")
+    mt2=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukb_akt_split.mt")
+    mt3=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukbb_MAF_0_01_split.mt")
+    all_datasets=[mt1,mt2,mt3]
+    mt=hl.MatrixTable.union_rows(*all_datasets)
+    mt_ukb_final=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_hits_akt_MAD_split.mt",overwrite=True)
 
 
+   
+
+
+
+    logger.info("finished importing ukb vcfs and wrote mts. Starting IBD")
+    
+
+    #IBD
+    #Import IBD hits
+    import_lustre_dir="file:/lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge"
+    vcf_header=f"{lustre_dir}/ibd_header.txt"
+    prefix_files="IBD"
+    mt= import_vcfs_to_hail(import_lustre_dir,vcf_header,prefix_files,"vcf.gz")
+    mt=hl.split_multi_hts(mt)
+    mt.write(f"{lustre_dir}/matrixtables/ibd_hits_split.mt", overwrite=True)
+    
+    # IBD AKT 
+    ibd_vcf=f"{import_lustre_dir}/ibd_akt.vcf.gz"
+    mt1 = hl.import_vcf(ibd_vcf, reference_genome='GRCh38', force_bgz=True, array_elements_required=False)
+    mt=hl.split_multi_hts(mt1)
+    mt.write(f"{lustre_dir}/matrixtables/ibd_akt_split.mt", overwrite=True)
 
 if __name__ == "__main__":
     # need to create spark cluster first before intiialising hail
