@@ -52,7 +52,7 @@ def import_vcfs_to_hail(path,vcf_header, prefix,suffix):
     
     print("Reading vcf filenames")
     #vcfs = [vcf["path"] for vcf in objects if (vcf["path"].startswith(f"{s3location_input}chr"+chromosome+"_") and vcf["path"].endswith(".vcf.gz"))]
-    vcfs = [vcf["path"] for vcf in objects if (vcf["path"].startswith(f"{path}/{prefix}") and vcf["path"].endswith({suffix}))]
+    vcfs = [vcf["path"] for vcf in objects if (vcf["path"].startswith(f"{path}/{prefix}") and vcf["path"].endswith(f"{suffix}"))]
 
     print(vcfs)
 
