@@ -76,7 +76,7 @@ def main():
     mt.write(f"{lustre_dir}/matrixtables/ukbb_hits_split.mt", overwrite=True)
 
     # Import UKB AKT
-    
+    import_lustre_dir="file:/lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge/"
     ukbb_vcf=f"{import_lustre_dir}/ukb_akt.sorted.vcf.gz"
     mt1 = hl.import_vcf(ukbb_vcf, reference_genome='GRCh38', force_bgz=True, array_elements_required=False)
     mt=hl.split_multi_hts(mt)
