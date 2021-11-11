@@ -121,6 +121,33 @@ def main():
     mt=hl.split_multi_hts(mt1)
     mt.write(f"{lustre_dir}/matrixtables/ibd_akt_split.mt", overwrite=True)
 
+    # IBD MAF 0.01
+    import_lustre_dir="file:/lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge/vcf_files/maf_001_ibd" 
+    ibd_common_vcf=f"{import_lustre_dir}/ibd_common3.vcf.gz"
+    mt1 = hl.import_vcf(ibd_common_vcf, reference_genome='GRCh38', force_bgz=True, array_elements_required=False)
+    mt=hl.split_multi_hts(mt1)
+    mt.write(f"{lustre_dir}/matrixtables/ibd_MAF001_split.mt", overwrite=True)
+
+    mt1=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ibd_hits_split.mt")
+    mt2=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ibd_akt_split.mt")
+    mt3=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ibd_MAF001_split.mt")
+    all_datasets=[mt1,mt2,mt3]
+    mt=hl.MatrixTable.union_rows(*all_datasets)
+    mt_ibd_final=mt.checkpoint(f"{lustre_dir}/matrixtables/IBD_hits_akt_MAF_split.mt",overwrite=True)
+
+    logger.info("Merging")
+    mt_ukb_final=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukbb_hits_akt_MAF_split.mt")
+    final_datasets=[mt_ibd_final,mt_ukb_final]
+    mt=hl.MatrixTable.union_cols(*final_datasets)
+
+    mt.write(f"{lustre_dir}/matrixtables/IBD_UKBB_merged_split_final.mt", overwrite=True)
+
+    print(f"UKB mt count: {mt_ukb_final.count()}")
+    print(f"IBD mt count: {mt_ibd_final.count()}")
+    print(f"Merged mt count: {mt.count()}")
+    
+
+
 if __name__ == "__main__":
     # need to create spark cluster first before intiialising hail
     sc = pyspark.SparkContext()
