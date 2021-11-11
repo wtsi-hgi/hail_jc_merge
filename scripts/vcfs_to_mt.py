@@ -67,7 +67,8 @@ def import_vcfs_to_hail(path,vcf_header, prefix,suffix):
 
 def main():
     # Import UKB hits
-    import_lustre_dir="file:/lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge"
+    logger.info("UKB hits")
+    import_lustre_dir="file:/lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge/vcf_files"
     vcf_header=f"{lustre_dir}/vcf_header.txt"
     prefix_files="ukbb"
     mt= import_vcfs_to_hail(import_lustre_dir,vcf_header,prefix_files,"vcf.gz")
