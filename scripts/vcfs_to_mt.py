@@ -90,12 +90,12 @@ def main():
     # mt=hl.split_multi_hts(mt)
     # mt.write(f"{lustre_dir}/matrixtables/ukbb_MAF_0_01_split.mt")
 
-    mt1=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukbb_hits_split.mt")
-    mt2=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukb_akt_split.mt")
-    mt3=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukbb_MAF_0_01_split.mt")
-    all_datasets=[mt1,mt2,mt3]
-    mt=hl.MatrixTable.union_rows(*all_datasets)
-    mt_ukb_final=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_hits_akt_MAF_split.mt",overwrite=True)
+    # mt1=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukbb_hits_split.mt")
+    # mt3=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukbb_MAF_0_01_split.mt")
+    # mt2=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukb_akt_split.mt")
+    # all_datasets=[mt1,mt2,mt3]
+    # mt=hl.MatrixTable.union_rows(*all_datasets)
+    # mt_ukb_final=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_hits_akt_MAF_split.mt",overwrite=True)
 
 
    
@@ -114,7 +114,8 @@ def main():
     mt=hl.split_multi_hts(mt)
     mt.write(f"{lustre_dir}/matrixtables/ibd_hits_split.mt", overwrite=True)
     
-    # IBD AKT 
+    # IBD AKT
+    import_lustre_dir="file:/lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge" 
     ibd_vcf=f"{import_lustre_dir}/ibd_akt.vcf.gz"
     mt1 = hl.import_vcf(ibd_vcf, reference_genome='GRCh38', force_bgz=True, array_elements_required=False)
     mt=hl.split_multi_hts(mt1)
