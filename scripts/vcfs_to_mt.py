@@ -69,7 +69,7 @@ def main():
     # Import UKB hits
     import_lustre_dir="file:/lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge"
     vcf_header=f"{lustre_dir}/vcf_header.txt"
-    prefix_files="ukb"
+    prefix_files="ukbb"
     mt= import_vcfs_to_hail(import_lustre_dir,vcf_header,prefix_files,"vcf.gz")
     mt=hl.split_multi_hts(mt)
     mt.write(f"{lustre_dir}/matrixtables/ukbb_hits_split.mt", overwrite=True)
