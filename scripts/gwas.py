@@ -42,7 +42,7 @@ with open(f"{thresholds}", 'r') as f:
 tmp_dir = "hdfs://spark-master:9820/"
 temp_dir = "file:///home/ubuntu/data/tmp"
 #lustre_dir = "file:///lustre/scratch123/teams/hgi/mercury/megaWES-variantqc"
-plot_dir="lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge"
+plot_dir="/lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge"
 lustre_dir = "file:///lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge"
 import_lustre_dir="file:/lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge"
 
