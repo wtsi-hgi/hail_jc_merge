@@ -68,24 +68,23 @@ def import_vcfs_to_hail(path,vcf_header, prefix,suffix):
 def main():
     # Import UKB hits
     
-    logger.info("UKBB")
+    logger.info("IBD VCF")
 
     import_lustre_dir="file:///lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/glnexus_ibd"
-    ukbb_vcf=f"{import_lustre_dir}/output.vcf.gz"
-    vcf_header="file:///lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/glnexus_ibd/ukbb_header.txt"
-    mt1 = hl.import_vcf(ukbb_vcf, reference_genome='GRCh38', force_bgz=True, array_elements_required=False)
+    ibd_vcf=f"{import_lustre_dir}/output.vcf.gz"
+    mt1 = hl.import_vcf(ibd_vcf, reference_genome='GRCh38', force_bgz=True, array_elements_required=False)
     mt=hl.split_multi_hts(mt1)
-    mt.write(f"{lustre_dir}/matrixtables/IBD_complete_split.mt", overwrite=True)
-    ibd_mt=mt
+    ibd_mt=mt.checkpoint(f"{lustre_dir}/matrixtables/IBD_complete_split.mt", overwrite=True)
+    
 
-    logger.info("Import IBD")
+    logger.info("Import UKBB vcfs")
     import_lustre_dir="file:/lustre/scratch123/mdt1/projects/ukbiobank_genotypes/oct_2020_pvcf"
     vcf_header="file:///lustre/scratch123/mdt1/projects/ukbiobank_genotypes/oct_2020_pvcf/vcf_header.txt"
     prefix_files="ukb"
     mt= import_vcfs_to_hail(import_lustre_dir,vcf_header,prefix_files,"vcf.gz")
     mt=hl.split_multi_hts(mt)
-    mt.write(f"{lustre_dir}/matrixtables/ukbb_complete_split.mt", overwrite=True)
-    ukbb_mt=mt
+    ukbb_mt=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_complete_split.mt", overwrite=True)
+  
     all_datasets=[ibd_mt,ukbb_mt]
     mt=hl.MatrixTable.union_cols(*all_datasets)
     mt_merge=mt.checkpoint(f"{lustre_dir}/matrixtables/merged_ukb_ibd.mt", overwrite=True)
