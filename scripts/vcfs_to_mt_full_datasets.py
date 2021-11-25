@@ -73,7 +73,7 @@ def main():
     import_lustre_dir="file:///lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/glnexus_ibd"
     ibd_vcf=f"{import_lustre_dir}/output.vcf.gz"
     mt1 = hl.import_vcf(ibd_vcf, reference_genome='GRCh38', force_bgz=True, array_elements_required=False)
-    mt=hl.split_multi_hts(mt1)
+    mt=hl.split_multi_hts(mt1, shuffle=True)
     ibd_mt=mt.checkpoint(f"{lustre_dir}/matrixtables/IBD_complete_split.mt", overwrite=True)
     
 
@@ -82,7 +82,7 @@ def main():
     vcf_header="file:///lustre/scratch123/mdt1/projects/ukbiobank_genotypes/oct_2020_pvcf/vcf_header.txt"
     prefix_files="ukb"
     mt= import_vcfs_to_hail(import_lustre_dir,vcf_header,prefix_files,"vcf.gz")
-    mt=hl.split_multi_hts(mt)
+    mt=hl.split_multi_hts(mt, shuffle=True)
     ukbb_mt=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_complete_split.mt", overwrite=True)
   
     all_datasets=[ibd_mt,ukbb_mt]
