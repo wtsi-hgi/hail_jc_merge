@@ -70,7 +70,7 @@ def main():
     
     logger.info("UKBB")
 
-    import_lustre_dir="file:/lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/glnexus_ibd"
+    import_lustre_dir="file:///lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/glnexus_ibd"
     ukbb_vcf=f"{import_lustre_dir}/output.vcf.gz"
     vcf_header="file:///lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/glnexus_ibd/ukbb_header.txt"
     mt1 = hl.import_vcf(ukbb_vcf, reference_genome='GRCh38', force_bgz=True, array_elements_required=False)
@@ -92,7 +92,7 @@ def main():
     print(f"UKB mt count: {ukbb_mt.count()}")
     print(f"IBD mt count: {ibd_mt.count()}")
     print(f"Merged mt count: {mt_merge.count()}")
-    
+
     # import_lustre_dir="file:/lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge/vcf_files/maf_001_ukb"
     # vcf_header=f"{lustre_dir}/vcf_header.txt"
     # prefix_files="ukb"
