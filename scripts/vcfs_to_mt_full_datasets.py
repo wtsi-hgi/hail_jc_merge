@@ -70,12 +70,13 @@ def main():
     
     logger.info("IBD VCF")
 
-    import_lustre_dir="file:///lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/glnexus_ibd"
-    ibd_vcf=f"{import_lustre_dir}/output.vcf.gz"
-    mt1 = hl.import_vcf(ibd_vcf, reference_genome='GRCh38', force_bgz=True, array_elements_required=False)
-    mt=hl.split_multi_hts(mt1, permit_shuffle=True)
-    ibd_mt=mt.checkpoint(f"{lustre_dir}/matrixtables/IBD_complete_split.mt", overwrite=True)
-    
+    #import_lustre_dir="file:///lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/glnexus_ibd"
+    #ibd_vcf=f"{import_lustre_dir}/output.vcf.gz"
+    #mt1 = hl.import_vcf(ibd_vcf, reference_genome='GRCh38', force_bgz=True, array_elements_required=False)
+    #mt=hl.split_multi_hts(mt1, permit_shuffle=True)
+    #ibd_mt=mt.checkpoint(f"{lustre_dir}/matrixtables/IBD_complete_split.mt", overwrite=True)
+    ibd_mt=hl.read_matrix_table(f"{lustre_dir}/matrixtables/IBD_complete_split.mt")
+    logger.info("Done IBD.")
 
     logger.info("Import UKBB vcfs")
     import_lustre_dir="file:/lustre/scratch123/mdt1/projects/ukbiobank_genotypes/oct_2020_pvcf"
