@@ -83,6 +83,7 @@ def main():
     vcf_header="file:///lustre/scratch123/mdt1/projects/ukbiobank_genotypes/oct_2020_pvcf/vcf_header.txt"
     prefix_files="ukb"
     mt= import_vcfs_to_hail(import_lustre_dir,vcf_header,prefix_files,"vcf.gz")
+    mt=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_complete.mt", overwrite=True)
     mt=hl.split_multi_hts(mt, permit_shuffle=True)
     ukbb_mt=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_complete_split.mt", overwrite=True)
   
