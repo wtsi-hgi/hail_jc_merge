@@ -78,7 +78,7 @@ def main():
 
     gwas=gwas.checkpoint(f"{lustre_dir}/gwas_merged.table", overwrite=True)
     gwas.export(
-            f"{lustre_dir}/gwas_merged.tsv.gz", header=True)
+            f"{lustre_dir}/gwas/gwas_merged.tsv.gz", header=True)
 
     p = hl.plot.manhattan(gwas.p_value, title=f" GWAS")
     output_file(
