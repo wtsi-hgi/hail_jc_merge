@@ -62,7 +62,11 @@ def import_vcfs_to_hail(path,vcf_header, prefix,suffix):
    
     return mt
 
-   
+def interval_mt(mt,chromosome):
+       intervals = [chromosome]
+       filtered_mt = hl.filter_intervals(mt,[hl.parse_locus_interval(x, reference_genome='GRCh38') for x in intervals])
+
+       return filtered_mt
 
 
 def main():
@@ -86,15 +90,21 @@ def main():
     #mt=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_complete.mt", overwrite=True)
     mt=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukbb_complete.mt")
     #mt=hl.split_multi_hts(mt, permit_shuffle=True)
-    mt=hl.split_multi_hts(mt)
-    ukbb_mt=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_complete_split.mt", overwrite=True)
+    chromosomes=['chr1','chr2','chr3', 'chr4','chr5','chr6','chr7', 'chr8',
+    'chr9','chr10','chr11', 'chr12','chr13','chr14','chr15', 'chr16',
+    'chr17','chr18','chr19', 'chr20','chr21','chr22','chrX', 'chrY']
+    for chr in chromosomes:
+        mt_int=interval_mt(mt,chr)
+        mt_int=hl.split_multi_hts(mt_int, permit_shuffle=True)
+        mt_int.write(f"{lustre_dir}/matrixtables/ukbb_{chr}_split.mt")
+    #ukbb_mt=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_complete_split.mt", overwrite=True)
   
-    all_datasets=[ibd_mt,ukbb_mt]
-    mt=hl.MatrixTable.union_cols(*all_datasets)
-    mt_merge=mt.checkpoint(f"{lustre_dir}/matrixtables/merged_ukb_ibd.mt", overwrite=True)
-    print(f"UKB mt count: {ukbb_mt.count()}")
-    print(f"IBD mt count: {ibd_mt.count()}")
-    print(f"Merged mt count: {mt_merge.count()}")
+   #all_datasets=[ibd_mt,ukbb_mt]
+   # mt=hl.MatrixTable.union_cols(*all_datasets)
+   # mt_merge=mt.checkpoint(f"{lustre_dir}/matrixtables/merged_ukb_ibd.mt", overwrite=True)
+   # print(f"UKB mt count: {ukbb_mt.count()}")
+   # print(f"IBD mt count: {ibd_mt.count()}")
+   # print(f"Merged mt count: {mt_merge.count()}")
 
     # import_lustre_dir="file:/lustre/scratch123/mdt1/projects/wes_jc_ukb_ibd/hail_merge/vcf_files/maf_001_ukb"
     # vcf_header=f"{lustre_dir}/vcf_header.txt"
