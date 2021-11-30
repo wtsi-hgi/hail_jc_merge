@@ -85,7 +85,8 @@ def main():
     #mt= import_vcfs_to_hail(import_lustre_dir,vcf_header,prefix_files,"vcf.gz")
     #mt=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_complete.mt", overwrite=True)
     mt=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukbb_complete.mt")
-    mt=hl.split_multi_hts(mt, permit_shuffle=True)
+    #mt=hl.split_multi_hts(mt, permit_shuffle=True)
+    mt=hl.split_multi_hts(mt)
     ukbb_mt=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_complete_split.mt", overwrite=True)
   
     all_datasets=[ibd_mt,ukbb_mt]
