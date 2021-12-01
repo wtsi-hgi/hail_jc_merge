@@ -102,7 +102,7 @@ def main():
     #prefix_files="ukb"
     #mt= import_vcfs_to_hail(import_lustre_dir,vcf_header,prefix_files,"vcf.gz")
     #mt=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_complete.mt", overwrite=True)
-    mt=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukbb_complete.mt")
+    #mt=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukbb_complete.mt")
     #mt=hl.split_multi_hts(mt, permit_shuffle=True)
     
     #for chr in chromosomes:
