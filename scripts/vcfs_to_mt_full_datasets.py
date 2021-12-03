@@ -109,15 +109,17 @@ def main():
     #    mt_split=split_multi(mt,chr)
     #    mt_split.write(f"{lustre_dir}/matrixtables/ukbb_{chr}_split.mt")
     
-    mt1=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukbb_chr1_split.mt")
-    chroms=chromosomes[1:]
-    mt=merge_chromosomes(mt1, chroms)
-    ukbb_mt=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_complete_split.mt", overwrite=True)
-  
+   # mt1=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukbb_chr1_split.mt")
+   # chroms=chromosomes[1:]
+   # mt=merge_chromosomes(mt1, chroms)
+   # ukbb_mt=mt.checkpoint(f"{lustre_dir}/matrixtables/ukbb_complete_split.mt", overwrite=True)
+    ukbb_mt=hl.read_matrix_table(f"{lustre_dir}/matrixtables/ukbb_complete_split.mt")
 
     all_datasets=[ibd_mt,ukbb_mt]
-    mt=hl.MatrixTable.union_cols(*all_datasets)
-    mt_merge=mt.checkpoint(f"{lustre_dir}/matrixtables/merged_ukb_ibd.mt", overwrite=True)
+    #mt=hl.MatrixTable.union_cols(*all_datasets)
+    #mt_merge=mt.checkpoint(f"{lustre_dir}/matrixtables/merged_ukb_ibd.mt", overwrite=True)
+    mt=hl.MatrixTable.union_cols(*all_datasets, row_join_type='outer')
+    mt_merge=mt.checkpoint(f"{lustre_dir}/matrixtables/merged_ukb_ibd_OUTER_join.mt", overwrite=True)
     print(f"UKB mt count: {ukbb_mt.count()}")
     print(f"IBD mt count: {ibd_mt.count()}")
     print(f"Merged mt count: {mt_merge.count()}")
