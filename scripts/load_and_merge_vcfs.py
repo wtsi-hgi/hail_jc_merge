@@ -20,7 +20,7 @@ def load_vcfs_to_hail_one_chrom(path,vcf_header, prefix,suffix):
     print(vcfs)
     print("Importing")
     #check the first file exists and has a size
-    print(os.path.getsize(vcfs[0]))
+    #print(os.path.getsize(vcfs[0]))
     mt = hl.import_vcf(vcfs, array_elements_required=False, force_bgz=True, header_file= vcf_header)
     print(mt.count())
     print("Imported")
